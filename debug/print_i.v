@@ -12,21 +12,39 @@ module PrintI(HEX, VALUE);
     reg [3:0] mod;
     integer i;
 
-    for(i = 0; i < 24; i = i + 4) begin
-      if(tmp != 20'd0) begin
-        mod = tmp % 20'd10;
-        parse[i] = mod[0];
-        parse[i + 1] = mod[1];
-        parse[i + 2] = mod[2];
-        parse[i + 3] = mod[3];
-        tmp = tmp / 20'd10;
+    if(value == 20'd0) begin
+      for(i = 0; i < 24; i = i + 4) begin
+        if(i == 0) begin
+          parse[i] = 1'd0;
+          parse[i + 1] = 1'd0;
+          parse[i + 2] = 1'd0;
+          parse[i + 3] = 1'd0;
+        end
+        else begin
+          parse[i] = 1'd1;
+          parse[i + 1] = 1'd1;
+          parse[i + 2] = 1'd1;
+          parse[i + 3] = 1'd1;
+        end
       end
-      else begin
-        // ハイインピーダンス
-        parse[i] = 1'b1;
-        parse[i + 1] = 1'b1;
-        parse[i + 2] = 1'b1;
-        parse[i + 3] = 1'b1;
+    end
+    else begin
+      for(i = 0; i < 24; i = i + 4) begin
+        if(tmp != 20'd0) begin
+          mod = tmp % 20'd10;
+          parse[i] = mod[0];
+          parse[i + 1] = mod[1];
+          parse[i + 2] = mod[2];
+          parse[i + 3] = mod[3];
+          tmp = tmp / 20'd10;
+        end
+        else begin
+          // ハイインピーダンス
+          parse[i] = 1'b1;
+          parse[i + 1] = 1'b1;
+          parse[i + 2] = 1'b1;
+          parse[i + 3] = 1'b1;
+        end
       end
     end
   endfunction
